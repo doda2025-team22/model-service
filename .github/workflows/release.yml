@@ -52,7 +52,7 @@ jobs:
 
       - name: Build and push multi-arch image
         run: |
-          IMG="ghcr.io/${{ github.IMAGE_NAME }}"
+          IMG="ghcr.io/${{ env.IMAGE_NAME }}"
           IMG=${IMG@L}
 
           docker buildx build \
