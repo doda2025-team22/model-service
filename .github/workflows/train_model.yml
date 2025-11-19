@@ -13,11 +13,16 @@ jobs:
             - name: Checkout repo
               uses: actions/checkout@v3
 <<<<<<< HEAD
+<<<<<<< HEAD
               with:
                 fetch-depth: 0
                 tags: true
 =======
 >>>>>>> 1236283 (Implementation of f9)
+=======
+              with:
+                fetch-depth: 0
+>>>>>>> e8ca1e1 (Attempted versioning fix)
             
             - name: Setup Python
               uses: actions/setup-python@v4
