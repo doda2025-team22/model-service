@@ -1,0 +1,60 @@
+name: Model Training and Release
+
+on:
+    push:
+        tags:
+            - "v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+    train-release:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v3
+            
+            - name: Setup Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: "3.12"
+
+            - name: Parse version from tag
+              run: |
+                VERSION=${GITHUB_REF:11}
+                MAJOR=$(echo "$VERSION" | cut -d . -f 1)
+                MINOR=$(echo "$VERSION" | cut -d . -f 2)
+                PATCH=$(echo "$VERSION" | cut -d . -f 3)
+                echo "version=$VERSION" >> $GITHUB_ENV
+                echo "version_major=$MAJOR" >> $GITHUB_ENV
+                echo "version_minor=$MINOR" >> $GITHUB_ENV
+                echo "version_patch=$PATCH" >> $GITHUB_ENV
+
+            - name: Install dependencies
+              working-directory: model-service
+              run: |
+                pip install -r requirements.txt
+
+            - name: Train model
+              working-directory: model-service
+              run: |
+                mkdir -p output
+                python src/read_data.py
+                python src/text_preprocessing.py
+                python src/text_classification.py
+
+            - name: Install gh
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y gh
+
+            - name: Authenticate gh
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                echo $GITHUB_TOKEN | gh auth login --with-token
+
+            - name: Release model
+              run: |
+                gh release create v${VERSION}
+                gh release upload v${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
+        
