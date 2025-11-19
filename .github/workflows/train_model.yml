@@ -57,7 +57,7 @@ jobs:
 =======
 >>>>>>> bf28310 (Attempted "install dependencies" fix)
               run: |
-                pip install -r model-service/requirements.txt
+                pip install -r requirements.txt
 
             - name: Train model
 <<<<<<< HEAD
@@ -65,10 +65,10 @@ jobs:
               working-directory: model-service
 >>>>>>> 1236283 (Implementation of f9)
               run: |
-                mkdir -p model-service/output
-                python model-service/src/read_data.py
-                python model-service/src/text_preprocessing.py
-                python model-service/src/text_classification.py
+                mkdir -p output
+                python src/read_data.py
+                python src/text_preprocessing.py
+                python src/text_classification.py
 
             - name: Install gh
               run: |
