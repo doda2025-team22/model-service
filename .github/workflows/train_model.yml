@@ -86,6 +86,7 @@ jobs:
                 GH_TOKEN: ${{ secrets.F9_SECRET }}
               run: |
 <<<<<<< HEAD
+<<<<<<< HEAD
                 gh release create $version \
                     --title "Model release $version" \
                     --notes "Automated training and release of models"
@@ -102,6 +103,10 @@ jobs:
 =======
                 gh release create v${VERSION} \
                     --title "Model release v${VERSION}" \
+=======
+                gh release create ${VERSION} \
+                    --title "Model release ${VERSION}" \
+>>>>>>> 4ae4397 (Attempted version parsing logic fix v2)
                     --notes "Automated training and release of models"
 >>>>>>> efe468c (Added release title and notes)
                 gh release upload v${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
