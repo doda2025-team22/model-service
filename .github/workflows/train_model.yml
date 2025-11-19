@@ -45,13 +45,9 @@ jobs:
                 sudo apt-get update
                 sudo apt-get install -y gh
 
-            - name: Authenticate gh
+            - name: Release model
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: |
-                echo $GITHUB_TOKEN | gh auth login --with-token
-
-            - name: Release model
               run: |
                 gh release create v${VERSION}
                 gh release upload v${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
