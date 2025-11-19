@@ -31,15 +31,14 @@ jobs:
 
             - name: Install dependencies
               run: |
-                pip install -r requirements.txt
+                pip install -r model-service/requirements.txt
 
             - name: Train model
-              working-directory: model-service
               run: |
-                mkdir -p output
-                python src/read_data.py
-                python src/text_preprocessing.py
-                python src/text_classification.py
+                mkdir -p model-service/output
+                python model-service/src/read_data.py
+                python model-service/src/text_preprocessing.py
+                python model-service/src/text_classification.py
 
             - name: Install gh
               run: |
@@ -55,5 +54,5 @@ jobs:
             - name: Release model
               run: |
                 gh release create v${VERSION}
-                gh release upload v${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
+                gh release upload v${VERSION} model-service/output/*.joblib --repo ${{ github.repository }} --clobber
         
