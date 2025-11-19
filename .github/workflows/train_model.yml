@@ -47,7 +47,7 @@ jobs:
 
             - name: Release model
               env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GH_TOKEN: ${{ secrets.PAT_TOKEN }}
               run: |
                 gh release create v${VERSION}
                 gh release upload v${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
