@@ -5,11 +5,20 @@ import joblib
 from flask import Flask, jsonify, request
 from flasgger import Swagger
 import pandas as pd
+import os
 
 from text_preprocessing import prepare, _extract_message_len, _text_process
 
 app = Flask(__name__)
 swagger = Swagger(app)
+
+def load_model():
+    model_path = os.environ.get("MODEL_PATH", "output/model.joblib")
+    if not os.path.exists(model_path):
+        raise FileNotFoundError("model.joblib not found")
+    return joblib.load(model_path)
+
+model = load_model()
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -37,7 +46,6 @@ def predict():
     input_data = request.get_json()
     sms = input_data.get('sms')
     processed_sms = prepare(sms)
-    model = joblib.load('output/model.joblib')
     prediction = model.predict(processed_sms)[0]
     
     res = {
