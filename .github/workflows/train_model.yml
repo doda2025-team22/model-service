@@ -12,9 +12,12 @@ jobs:
         steps:
             - name: Checkout repo
               uses: actions/checkout@v3
+<<<<<<< HEAD
               with:
                 fetch-depth: 0
                 tags: true
+=======
+>>>>>>> 1236283 (Implementation of f9)
             
             - name: Setup Python
               uses: actions/setup-python@v4
@@ -23,6 +26,7 @@ jobs:
 
             - name: Parse version from tag
               run: |
+<<<<<<< HEAD
                 VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) 
                 echo "Project version: " $VERSION
                 RELEASE=${VERSION%-SNAPSHOT}
@@ -36,10 +40,27 @@ jobs:
                 echo "RELEASE_PATCH=$PATCH" >> $GITHUB_ENV
                 
             - name: Install dependencies
+=======
+                VERSION=${GITHUB_REF:11}
+                MAJOR=$(echo "$VERSION" | cut -d . -f 1)
+                MINOR=$(echo "$VERSION" | cut -d . -f 2)
+                PATCH=$(echo "$VERSION" | cut -d . -f 3)
+                echo "version=$VERSION" >> $GITHUB_ENV
+                echo "version_major=$MAJOR" >> $GITHUB_ENV
+                echo "version_minor=$MINOR" >> $GITHUB_ENV
+                echo "version_patch=$PATCH" >> $GITHUB_ENV
+
+            - name: Install dependencies
+              working-directory: model-service
+>>>>>>> 1236283 (Implementation of f9)
               run: |
                 pip install -r requirements.txt
 
             - name: Train model
+<<<<<<< HEAD
+=======
+              working-directory: model-service
+>>>>>>> 1236283 (Implementation of f9)
               run: |
                 mkdir -p output
                 python src/read_data.py
@@ -51,6 +72,7 @@ jobs:
                 sudo apt-get update
                 sudo apt-get install -y gh
 
+<<<<<<< HEAD
             - name: Release model
               env:
                 GH_TOKEN: ${{ secrets.F9_SECRET }}
@@ -59,4 +81,16 @@ jobs:
                     --title "Model release $version" \
                     --notes "Automated training and release of models"
                 gh release upload $version output/*.joblib --repo ${{ github.repository }} --clobber
+=======
+            - name: Authenticate gh
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                echo $GITHUB_TOKEN | gh auth login --with-token
+
+            - name: Release model
+              run: |
+                gh release create v${VERSION}
+                gh release upload v${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
+>>>>>>> 1236283 (Implementation of f9)
         
