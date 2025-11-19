@@ -52,5 +52,5 @@ jobs:
                 gh release create ${VERSION} \
                     --title "Model release ${VERSION}" \
                     --notes "Automated training and release of models"
-                gh release upload v${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
+                gh release upload ${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
         
