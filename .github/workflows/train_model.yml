@@ -51,8 +51,11 @@ jobs:
                 echo "version_patch=$PATCH" >> $GITHUB_ENV
 
             - name: Install dependencies
+<<<<<<< HEAD
               working-directory: model-service
 >>>>>>> 1236283 (Implementation of f9)
+=======
+>>>>>>> bf28310 (Attempted "install dependencies" fix)
               run: |
                 pip install -r requirements.txt
 
