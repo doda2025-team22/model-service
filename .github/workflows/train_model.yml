@@ -95,6 +95,7 @@ jobs:
               run: |
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 gh release create $version \
                     --title "Model release $version" \
                     --notes "Automated training and release of models"
@@ -122,4 +123,11 @@ jobs:
 =======
                 gh release upload ${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
 >>>>>>> 943d725 (Attempted version parsing logic fix v3)
+=======
+                gh release create $VERSION \
+                    --title "Model release $VERSION" \
+                    --notes "Automated training and release of models"
+                    --target $(git rev-parse HEAD)
+                gh release upload $VERSION output/*.joblib --repo ${{ github.repository }} --clobber
+>>>>>>> 9e87e5e (Release model version parsing changes)
         
