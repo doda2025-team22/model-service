@@ -108,6 +108,10 @@ jobs:
                     --title "Model release ${VERSION}" \
 >>>>>>> 4ae4397 (Attempted version parsing logic fix v2)
                     --notes "Automated training and release of models"
+<<<<<<< HEAD
 >>>>>>> efe468c (Added release title and notes)
                 gh release upload v${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
+=======
+                gh release upload ${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
+>>>>>>> 943d725 (Attempted version parsing logic fix v3)
         
