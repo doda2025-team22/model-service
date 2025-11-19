@@ -27,6 +27,7 @@ jobs:
             - name: Parse version from tag
               run: |
 <<<<<<< HEAD
+<<<<<<< HEAD
                 VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) 
                 echo "Project version: " $VERSION
                 RELEASE=${VERSION%-SNAPSHOT}
@@ -42,6 +43,9 @@ jobs:
             - name: Install dependencies
 =======
                 VERSION=${GITHUB_REF:11}
+=======
+                VERSION=${GITHUB_REF#refs/tags/}
+>>>>>>> 147ca99 (Attempted version parsing logic fix)
                 MAJOR=$(echo "$VERSION" | cut -d . -f 1)
                 MINOR=$(echo "$VERSION" | cut -d . -f 2)
                 PATCH=$(echo "$VERSION" | cut -d . -f 3)
