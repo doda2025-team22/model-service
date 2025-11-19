@@ -17,12 +17,15 @@ jobs:
               with:
                 fetch-depth: 0
                 tags: true
+<<<<<<< HEAD
 =======
 >>>>>>> 1236283 (Implementation of f9)
 =======
               with:
                 fetch-depth: 0
 >>>>>>> e8ca1e1 (Attempted versioning fix)
+=======
+>>>>>>> 7d4764e (Attempted versioning fix v2)
             
             - name: Setup Python
               uses: actions/setup-python@v4
@@ -50,15 +53,15 @@ jobs:
                 VERSION=${GITHUB_REF:11}
 =======
                 VERSION=${GITHUB_REF#refs/tags/}
+<<<<<<< HEAD
 >>>>>>> 147ca99 (Attempted version parsing logic fix)
                 MAJOR=$(echo "$VERSION" | cut -d . -f 1)
                 MINOR=$(echo "$VERSION" | cut -d . -f 2)
                 PATCH=$(echo "$VERSION" | cut -d . -f 3)
+=======
+>>>>>>> 7d4764e (Attempted versioning fix v2)
                 echo "version=$VERSION" >> $GITHUB_ENV
-                echo "version_major=$MAJOR" >> $GITHUB_ENV
-                echo "version_minor=$MINOR" >> $GITHUB_ENV
-                echo "version_patch=$PATCH" >> $GITHUB_ENV
-
+                
             - name: Install dependencies
 <<<<<<< HEAD
               working-directory: model-service
