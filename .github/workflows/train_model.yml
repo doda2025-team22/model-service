@@ -49,6 +49,8 @@ jobs:
               env:
                 GH_TOKEN: ${{ secrets.F9_SECRET }}
               run: |
-                gh release create v${VERSION}
+                gh release create v${VERSION} \
+                    --title "Model release v${VERSION}" \
+                    --notes "Automated training and release of models"
                 gh release upload v${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
         
