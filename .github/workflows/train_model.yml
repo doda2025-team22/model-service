@@ -74,8 +74,19 @@ jobs:
 =======
                 VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) 
                 echo "Project version: " $VERSION
+                RELEASE=${VERSION%-SNAPSHOT}
+                MAJOR=$(echo "$RELEASE" | cut -d . -f 1)
+                MINOR=$(echo "$RELEASE" | cut -d . -f 2)
+                PATCH=$(echo "$RELEASE" | cut -d . -f 3)
                 echo "version=$VERSION" >> $GITHUB_ENV
+<<<<<<< HEAD
 >>>>>>> c5f8207 (Attempted single source of truth v3)
+=======
+                echo "RELEASE=$RELEASE" >> $GITHUB_ENV
+                echo "RELEASE_MAJOR=$MAJOR" >> $GITHUB_ENV
+                echo "RELEASE_MINOR=$MINOR" >> $GITHUB_ENV
+                echo "RELEASE_PATCH=$PATCH" >> $GITHUB_ENV
+>>>>>>> 9a9d755 (Attempted single source of truth v4)
                 
             - name: Install dependencies
 <<<<<<< HEAD
