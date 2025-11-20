@@ -1,4 +1,8 @@
-output
+output/
+models/
+*.joblib
+*.pkl
+*.sav
 .git
 *.md
 .cache

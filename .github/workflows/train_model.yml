@@ -1,0 +1,61 @@
+name: Model Training and Release
+
+on:
+    push:
+        tags:
+            - "v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+    train-release:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+                  tags: true
+
+            - name: Setup Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: "3.12"
+
+            - name: Parse version from tag
+              run: |
+                  VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) 
+                  echo "Project version: " $VERSION
+                  RELEASE=${VERSION%-SNAPSHOT}
+                  MAJOR=$(echo "$RELEASE" | cut -d . -f 1)
+                  MINOR=$(echo "$RELEASE" | cut -d . -f 2)
+                  PATCH=$(echo "$RELEASE" | cut -d . -f 3)
+                  echo "version=$VERSION" >> $GITHUB_ENV
+                  echo "RELEASE=$RELEASE" >> $GITHUB_ENV
+                  echo "RELEASE_MAJOR=$MAJOR" >> $GITHUB_ENV
+                  echo "RELEASE_MINOR=$MINOR" >> $GITHUB_ENV
+                  echo "RELEASE_PATCH=$PATCH" >> $GITHUB_ENV
+
+            - name: Install dependencies
+              run: |
+                  pip install -r requirements.txt
+
+            - name: Train model
+              run: |
+                  mkdir -p output
+                  python src/read_data.py
+                  python src/text_preprocessing.py
+                  python src/text_classification.py
+
+            - name: Install gh
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y gh
+
+            - name: Release model
+              env:
+                  GH_TOKEN: ${{ secrets.F9_SECRET }}
+              run: |
+                  gh release create $version \
+                      --title "Model release $version" \
+                      --notes "Automated training and release of models"
+                  gh release upload $version output/*.joblib --repo ${{ github.repository }} --clobber
