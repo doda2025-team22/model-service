@@ -5,8 +5,7 @@
 # docker run -p 8081:8081 sms-model-service
 
 # 2b) Run WITH volume mount / User's own model:
-# docker run -p 8081:8081 -v !!PATH_TO_MODEL_DIRECTORY!!:/app/models -e MODEL_PATH=/app/models/model.joblib sms-model-service
-
+# docker run -p 8081:8081 -v !!PATH_TO_MODEL_DIRECTORY!!:/app/output -e MODEL_PATH=/app/output/model.joblib sms-model-service
 FROM python:3.12
 
 WORKDIR /app
@@ -15,7 +14,7 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY . .
+COPY src/ ./src/
 
 ENV MODEL_PATH=/app/output/model.joblib
 
