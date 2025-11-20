@@ -12,20 +12,9 @@ jobs:
         steps:
             - name: Checkout repo
               uses: actions/checkout@v3
-<<<<<<< HEAD
-<<<<<<< HEAD
               with:
                 fetch-depth: 0
                 tags: true
-<<<<<<< HEAD
-=======
->>>>>>> 1236283 (Implementation of f9)
-=======
-              with:
-                fetch-depth: 0
->>>>>>> e8ca1e1 (Attempted versioning fix)
-=======
->>>>>>> 7d4764e (Attempted versioning fix v2)
             
             - name: Setup Python
               uses: actions/setup-python@v4
@@ -34,10 +23,6 @@ jobs:
 
             - name: Parse version from tag
               run: |
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
                 VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) 
                 echo "Project version: " $VERSION
                 RELEASE=${VERSION%-SNAPSHOT}
@@ -51,57 +36,10 @@ jobs:
                 echo "RELEASE_PATCH=$PATCH" >> $GITHUB_ENV
                 
             - name: Install dependencies
-=======
-                VERSION=${GITHUB_REF:11}
-=======
-                VERSION=${GITHUB_REF#refs/tags/}
-<<<<<<< HEAD
->>>>>>> 147ca99 (Attempted version parsing logic fix)
-                MAJOR=$(echo "$VERSION" | cut -d . -f 1)
-                MINOR=$(echo "$VERSION" | cut -d . -f 2)
-                PATCH=$(echo "$VERSION" | cut -d . -f 3)
-=======
->>>>>>> 7d4764e (Attempted versioning fix v2)
-                echo "version=$VERSION" >> $GITHUB_ENV
-=======
-                version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) 
-                echo "Project version: " $VERSION
-<<<<<<< HEAD
->>>>>>> dc586fc (Attempted single source of truth)
-=======
-                echo "VERSION=$VERSION" >> $GITHUB_ENV
->>>>>>> e4491ac (Attempted single source of truth v2)
-=======
-                VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) 
-                echo "Project version: " $VERSION
-                RELEASE=${VERSION%-SNAPSHOT}
-                MAJOR=$(echo "$RELEASE" | cut -d . -f 1)
-                MINOR=$(echo "$RELEASE" | cut -d . -f 2)
-                PATCH=$(echo "$RELEASE" | cut -d . -f 3)
-                echo "version=$VERSION" >> $GITHUB_ENV
-<<<<<<< HEAD
->>>>>>> c5f8207 (Attempted single source of truth v3)
-=======
-                echo "RELEASE=$RELEASE" >> $GITHUB_ENV
-                echo "RELEASE_MAJOR=$MAJOR" >> $GITHUB_ENV
-                echo "RELEASE_MINOR=$MINOR" >> $GITHUB_ENV
-                echo "RELEASE_PATCH=$PATCH" >> $GITHUB_ENV
->>>>>>> 9a9d755 (Attempted single source of truth v4)
-                
-            - name: Install dependencies
-<<<<<<< HEAD
-              working-directory: model-service
->>>>>>> 1236283 (Implementation of f9)
-=======
->>>>>>> bf28310 (Attempted "install dependencies" fix)
               run: |
                 pip install -r requirements.txt
 
             - name: Train model
-<<<<<<< HEAD
-=======
-              working-directory: model-service
->>>>>>> 1236283 (Implementation of f9)
               run: |
                 mkdir -p output
                 python src/read_data.py
@@ -113,54 +51,12 @@ jobs:
                 sudo apt-get update
                 sudo apt-get install -y gh
 
-<<<<<<< HEAD
             - name: Release model
               env:
-<<<<<<< HEAD
                 GH_TOKEN: ${{ secrets.F9_SECRET }}
               run: |
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
                 gh release create $version \
                     --title "Model release $version" \
                     --notes "Automated training and release of models"
                 gh release upload $version output/*.joblib --repo ${{ github.repository }} --clobber
-=======
-            - name: Authenticate gh
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-=======
-                GH_TOKEN: ${{ secrets.PAT_TOKEN }}
->>>>>>> df9629d (Attempted to fix 403)
-              run: |
-                gh release create v${VERSION}
-=======
-                gh release create v${VERSION} \
-                    --title "Model release v${VERSION}" \
-=======
-                gh release create ${VERSION} \
-                    --title "Model release ${VERSION}" \
->>>>>>> 4ae4397 (Attempted version parsing logic fix v2)
-                    --notes "Automated training and release of models"
-<<<<<<< HEAD
->>>>>>> efe468c (Added release title and notes)
-                gh release upload v${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
-=======
-                gh release upload ${VERSION} output/*.joblib --repo ${{ github.repository }} --clobber
->>>>>>> 943d725 (Attempted version parsing logic fix v3)
-=======
-                gh release create $VERSION \
-                    --title "Model release $VERSION" \
-                    --notes "Automated training and release of models"
-                    --target $(git rev-parse HEAD)
-                gh release upload $VERSION output/*.joblib --repo ${{ github.repository }} --clobber
->>>>>>> 9e87e5e (Release model version parsing changes)
-=======
-                gh release create $version \
-                    --title "Model release $version" \
-                    --notes "Automated training and release of models"
-                gh release upload $version output/*.joblib --repo ${{ github.repository }} --clobber
->>>>>>> 13bda8b (Attempted train_model.yml naming fix/f9)
         
