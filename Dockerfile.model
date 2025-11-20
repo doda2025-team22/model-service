@@ -1,5 +1,5 @@
 # 1) Build container:
-# docker build -t sms-model-service .
+# docker build -x sms-model-service .
 
 # 2a) Run WITHOUT volume mount / Default model:
 # docker run -p 8081:8081 sms-model-service

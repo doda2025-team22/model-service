@@ -6,6 +6,7 @@ from flask import Flask, jsonify, request
 from flasgger import Swagger
 import pandas as pd
 import os
+import requests
 
 from text_preprocessing import prepare, _extract_message_len, _text_process
 
@@ -14,7 +15,7 @@ swagger = Swagger(app)
 
 def get_latest():
     default_model_url: f"https://api.github.com/repos/doda2025-team22/model-service/releases/latest"
-    resp = request.get(default_model_url)
+    resp = requests.get(default_model_url)
     resp.raise_for_status()
     data = resp.json()
     for asset in data["assets"]:
@@ -25,7 +26,7 @@ def get_latest():
 def download_model(model_path: str):
     url = get_latest()
     os.makedirs(os.path.dirname(model_path), exist_ok=True)
-    r = request.get(url)
+    r = requests.get(url)
     r.raise_for_status()
     with open(model_path, "wb") as f:
         f.write(r.content)
