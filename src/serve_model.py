@@ -12,10 +12,28 @@ from text_preprocessing import prepare, _extract_message_len, _text_process
 app = Flask(__name__)
 swagger = Swagger(app)
 
+def get_latest():
+    default_model_url: f"https://api.github.com/repos/doda2025-team22/model-service/releases/latest"
+    resp = request.get(default_model_url)
+    resp.raise_for_status()
+    data = resp.json()
+    for asset in data["assets"]:
+        if asset["name"] == "model.joblib":
+            return asset["browser_download_url"]
+    raise FileNotFoundError("model.joblib not found")
+    
+def download_model(model_path: str):
+    url = get_latest()
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
+    r = request.get(url)
+    r.raise_for_status()
+    with open(model_path, "wb") as f:
+        f.write(r.content)
+
 def load_model():
-    model_path = os.environ.get("MODEL_PATH", "output/model.joblib")
+    model_path = os.environ.get("MODEL_PATH", "app/output/model.joblib")
     if not os.path.exists(model_path):
-        raise FileNotFoundError("model.joblib not found")
+        download_model(model_path)
     return joblib.load(model_path)
 
 model = load_model()
