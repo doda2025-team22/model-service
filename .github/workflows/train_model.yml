@@ -96,6 +96,7 @@ jobs:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 gh release create $version \
                     --title "Model release $version" \
                     --notes "Automated training and release of models"
@@ -130,4 +131,11 @@ jobs:
                     --target $(git rev-parse HEAD)
                 gh release upload $VERSION output/*.joblib --repo ${{ github.repository }} --clobber
 >>>>>>> 9e87e5e (Release model version parsing changes)
+=======
+                gh release create $version \
+                    --title "Model release $version" \
+                    --notes "Automated training and release of models"
+                    --target $(git rev-parse HEAD)
+                gh release upload $version output/*.joblib --repo ${{ github.repository }} --clobber
+>>>>>>> 13bda8b (Attempted train_model.yml naming fix/f9)
         
