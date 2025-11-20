@@ -13,7 +13,7 @@ from text_preprocessing import prepare, _extract_message_len, _text_process
 app = Flask(__name__)
 swagger = Swagger(app)
 
-DEFAULT_MODEL_URL: "https://api.github.com/repos/doda2025-team22/model-service/releases/latest"
+DEFAULT_MODEL_URL = "https://api.github.com/repos/doda2025-team22/model-service/releases/latest"
 
 def get_latest():
     resp = requests.get(DEFAULT_MODEL_URL)
