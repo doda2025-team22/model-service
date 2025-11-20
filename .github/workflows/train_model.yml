@@ -36,6 +36,7 @@ jobs:
               run: |
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) 
                 echo "Project version: " $VERSION
                 RELEASE=${VERSION%-SNAPSHOT}
@@ -61,6 +62,10 @@ jobs:
 =======
 >>>>>>> 7d4764e (Attempted versioning fix v2)
                 echo "version=$VERSION" >> $GITHUB_ENV
+=======
+                version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) 
+                echo "Project version: " $VERSION
+>>>>>>> dc586fc (Attempted single source of truth)
                 
             - name: Install dependencies
 <<<<<<< HEAD
