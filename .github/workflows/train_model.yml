@@ -11,29 +11,18 @@ jobs:
 
         steps:
             - name: Checkout repo
-              uses: actions/checkout@v3
-              with:
-                  fetch-depth: 0
-                  tags: true
+              uses: actions/checkout@v5
 
             - name: Setup Python
               uses: actions/setup-python@v4
               with:
                   python-version: "3.12"
 
-            - name: Parse version from tag
+            - name: parse version from tag
+              id: version
               run: |
-                  VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) 
-                  echo "Project version: " $VERSION
-                  RELEASE=${VERSION%-SNAPSHOT}
-                  MAJOR=$(echo "$RELEASE" | cut -d . -f 1)
-                  MINOR=$(echo "$RELEASE" | cut -d . -f 2)
-                  PATCH=$(echo "$RELEASE" | cut -d . -f 3)
-                  echo "version=$VERSION" >> $GITHUB_ENV
-                  echo "RELEASE=$RELEASE" >> $GITHUB_ENV
-                  echo "RELEASE_MAJOR=$MAJOR" >> $GITHUB_ENV
-                  echo "RELEASE_MINOR=$MINOR" >> $GITHUB_ENV
-                  echo "RELEASE_PATCH=$PATCH" >> $GITHUB_ENV
+                  VERSION=${GITHUB_REF:11}
+                  echo "VERSION=$VERSION" >> $GITHUB_ENV
 
             - name: Install dependencies
               run: |
@@ -55,7 +44,7 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.F9_SECRET }}
               run: |
-                  gh release create $version \
-                      --title "Model release $version" \
+                  gh release create ${{ env.VERSION }} \
+                      --title "Model release ${{ env.VERSION }}" \
                       --notes "Automated training and release of models"
-                  gh release upload $version output/*.joblib --repo ${{ github.repository }} --clobber
+                  gh release upload ${{ env.VERSION }} output/*.joblib --repo ${{ github.repository }} --clobber

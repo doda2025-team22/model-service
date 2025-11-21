@@ -1,12 +1,6 @@
 name: Release Container Image
 
 on:
-  workflow_dispatch:
-    inputs:
-      build_id:
-        description: "Build identifier (e.g., latest, dev, etc.)"
-        required: true
-        default: "testing"
   push:
     tags:
       - "v*.*.*"
