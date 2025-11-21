@@ -14,11 +14,11 @@ WORKDIR /app
 COPY --from=builder /root/.local /root/.local
 COPY . .
 
-# Create output directory for models
+# Create default output directory for models
 RUN mkdir output
 
 # Set default model path
-ENV MODEL_PATH=/app/output/model.joblib
+ENV OUTPUT_DIR=/app/output
 
 # Set the path to include user-installed packages
 ENV PATH=/root/.local/bin:$PATH
