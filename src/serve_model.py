@@ -17,10 +17,11 @@ swagger = Swagger(app)
 DEFAULT_MODEL_URL = (
     "https://api.github.com/repos/doda2025-team22/model-service/releases/tags/1"
 )
-OUTPUT_DIR = os.environ.get("OUTPUT_DIR", "/app/output")
+OUTPUT_DIR = os.environ.get("OUTPUT_DIR")
 MODEL_PATH = os.path.join(OUTPUT_DIR, "model.joblib")
 PREPROCESSOR_PATH = os.path.join(OUTPUT_DIR, "preprocessor.joblib")
 PREPROCESSED_DATA_PATH = os.path.join(OUTPUT_DIR, "preprocessed_data.joblib")
+
 
 def download_artifacts(output_dir):
     if all(
