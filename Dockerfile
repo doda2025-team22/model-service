@@ -6,15 +6,6 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --user -r requirements.txt
 
-# Copy application code
-COPY . .
-
-# Train the model and prepare output
-RUN mkdir output
-RUN python src/read_data.py
-RUN python src/text_preprocessing.py
-RUN python src/text_classification.py
-
 FROM python:3.12.9-slim AS runner
 
 WORKDIR /app
@@ -22,6 +13,12 @@ WORKDIR /app
 # Only copy the necessary files from the builder stage
 COPY --from=builder /root/.local /root/.local
 COPY . .
+
+# Create output directory for models
+RUN mkdir output
+
+# Set default model path
+ENV MODEL_PATH=/app/output/model.joblib
 
 # Set the path to include user-installed packages
 ENV PATH=/root/.local/bin:$PATH
