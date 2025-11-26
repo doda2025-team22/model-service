@@ -1,50 +1,57 @@
 name: Model Training and Release
 
 on:
-    push:
-        tags:
-            - "v[0-9]+.[0-9]+.[0-9]+"
+  push:
+    branches:
+      - main
+    paths:
+      - "VERSION"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
-    train-release:
-        runs-on: ubuntu-latest
+  train-release:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout repo
-              uses: actions/checkout@v5
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
 
-            - name: Setup Python
-              uses: actions/setup-python@v4
-              with:
-                  python-version: "3.12"
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
 
-            - name: parse version from tag
-              id: version
-              run: |
-                  VERSION=${GITHUB_REF:11}
-                  echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - name: parse version from tag
+        id: version
+        run: |
+          VERSION=$(cat VERSION)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-            - name: Install dependencies
-              run: |
-                  pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
-            - name: Train model
-              run: |
-                  mkdir -p output
-                  python src/read_data.py
-                  python src/text_preprocessing.py
-                  python src/text_classification.py
+      - name: Train model
+        run: |
+          mkdir -p output
+          python src/read_data.py
+          python src/text_preprocessing.py
+          python src/text_classification.py
 
-            - name: Install gh
-              run: |
-                  sudo apt-get update
-                  sudo apt-get install -y gh
+      - name: Install gh
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
 
-            - name: Release model
-              env:
-                  GH_TOKEN: ${{ secrets.F9_SECRET }}
-              run: |
-                  gh release create ${{ env.VERSION }} \
-                      --title "Model release ${{ env.VERSION }}" \
-                      --notes "Automated training and release of models"
-                  gh release upload ${{ env.VERSION }} output/*.joblib --repo ${{ github.repository }} --clobber
+      - name: Release model
+        env:
+          GH_TOKEN: ${{ secrets.F9_SECRET }}
+        run: |
+          gh release create ${{ env.VERSION }} \
+              --title "Model release ${{ env.VERSION }}" \
+              --notes "Automated training and release of models"
+          gh release upload ${{ env.VERSION }} output/*.joblib --repo ${{ github.repository }} --clobber
