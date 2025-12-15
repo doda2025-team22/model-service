@@ -2,10 +2,8 @@ name: Release Container Image
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - "VERSION"
+    tags: 
+      - release 
   workflow_dispatch:
 
 env:
@@ -19,6 +17,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
+      - name: Delete original Tag
+        run: git push --delete origin ${GITHUB_REF#refs/tags/} #since the worklow only triggers with a tag, this should, in theory, not break
 
       - name: parse version from tag
         id: version
