@@ -13,6 +13,10 @@ env:
   IMAGE_NAME: doda2025-team22/model-service
   BUILD_ID: latest
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
