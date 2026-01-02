@@ -2,12 +2,16 @@
 Flask API of the SMS Spam detection model model.
 """
 
+import http
+import stat
 import joblib
 from flask import Flask, jsonify, request
 from flasgger import Swagger
 import pandas as pd
 import os
 import requests
+import time
+from cache import SMSCache
 
 from text_preprocessing import prepare, _extract_message_len, _text_process
 
@@ -49,6 +53,9 @@ preprocessor = joblib.load(PREPROCESSOR_PATH)
 preprocessed_data = joblib.load(PREPROCESSED_DATA_PATH)
 
 
+cache = SMSCache()
+
+
 @app.route("/predict", methods=["POST"])
 def predict():
     """
@@ -74,10 +81,27 @@ def predict():
     """
     input_data = request.get_json()
     sms = input_data.get("sms")
-    processed_sms = prepare(sms)
-    prediction = model.predict(processed_sms)[0]
 
-    res = {"result": prediction, "classifier": "decision tree", "sms": sms}
+    if cache.get(sms):
+        res = {
+            "result": cache.get(sms),
+            "classifier": "decision tree",
+            "sms": sms,
+            "cached": "true",
+        }
+        print("From cache")
+    else:
+        processed_sms = prepare(sms)
+        prediction = model.predict(processed_sms)[0]
+        cache.set(sms, prediction)
+        res = {
+            "result": prediction,
+            "classifier": "decision tree",
+            "sms": sms,
+            "cached": "false",
+        }
+        print("Not from cache")
+
     print(res)
     return jsonify(res)
 
