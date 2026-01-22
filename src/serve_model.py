@@ -11,6 +11,10 @@ import requests
 
 from text_preprocessing import prepare, _extract_message_len, _text_process
 
+# Define a default port as backup and read the environment port number
+PORT = int(os.getenv('BACKEND_PORT', 8081))
+
+
 app = Flask(__name__)
 swagger = Swagger(app)
 
@@ -84,4 +88,4 @@ def predict():
 
 if __name__ == "__main__":
     # clf = joblib.load('output/model.joblib')
-    app.run(host="0.0.0.0", port=8081, debug=True)
+    app.run(host="0.0.0.0", port=PORT , debug=True)
