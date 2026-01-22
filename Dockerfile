@@ -27,4 +27,4 @@ ENV PATH=/root/.local/bin:$PATH
 ENV BACKEND_PORT=8081
 EXPOSE ${BACKEND_PORT}
 
-CMD python src/serve_model.py --port ${BACKEND_PORT}
+CMD python src/serve_model.py  
