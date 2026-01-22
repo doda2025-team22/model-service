@@ -87,4 +87,9 @@ if __name__ == "__main__":
    
     # Define a default port as backup and read the environment port number
     PORT = int(os.getenv('BACKEND_PORT', 8081))
+    print(f"========================================")
+    print(f"BACKEND_PORT env var: {os.getenv('BACKEND_PORT')}")
+    print(f"PORT variable: {PORT}")
+    print(f"Starting Flask on port: {PORT}")
+    print(f"========================================")
     app.run(host="0.0.0.0", port=PORT , debug=True)
